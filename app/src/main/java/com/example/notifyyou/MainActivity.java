@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,14 +30,17 @@ public class MainActivity extends AppCompatActivity {
         CreateNotificationChannel();
 
         Button b = findViewById(R.id.NotificationButton);
+        EditText title = findViewById(R.id.CustomNotificationHead);
+        EditText body = findViewById(R.id.CustomNotificationBody);
+
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Notification n = new NotificationCompat.Builder(MainActivity.this, channelId)
                         .setOngoing(true)
                         .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("What the fuck")
-                        .setContentText("What the actual fuck")
+                        .setContentTitle(title.getText())
+                        .setContentText(body.getText())
                         .build();
 
                 NotificationManagerCompat nm = NotificationManagerCompat.from(MainActivity.this);
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     //                                          int[] grantResults)
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
+                    Toast.makeText(MainActivity.this, "You did not enable notification permission for this app", Toast.LENGTH_LONG).show();
                     return;
                 }
                 nm.notify(notificationId, n);

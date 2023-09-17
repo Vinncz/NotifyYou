@@ -18,6 +18,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
         >
+            <EditText
+                android:id="@+id/CustomNotificationHead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="Notification head" />
+
+            <EditText
+                android:id="@+id/CustomNotificationBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="Notification body" />
 
             <Button
                 android:id="@+id/NotificationButton"
