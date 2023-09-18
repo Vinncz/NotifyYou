@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NotifyYou</string>
+    <string name="pinned_tiles">Pinned Tiles</string>
 </resources>

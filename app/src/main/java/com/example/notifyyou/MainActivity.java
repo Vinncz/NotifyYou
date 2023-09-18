@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -17,11 +18,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.notifyyou.Models.TileItem;
+import com.example.notifyyou.RecyclerView.Adapter;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
-    final String channelId = "999";
-    final int notificationId = 999;
-    final String channelName = "KONTOL";
+    static final String channelId = "NotifyYouNotificationChannelId";
+    static int notificationId = 0;
+    static final String channelName = "KONTOL";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +62,22 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "You did not enable notification permission for this app", Toast.LENGTH_LONG).show();
                     return;
                 }
-                nm.notify(notificationId, n);
+
+                nm.notify(notificationId++, n);
             }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.RecyclerView);
+
+        ArrayList<TileItem> til = new ArrayList<>();
+        til.add(new TileItem("name1", "desc1"));
+        til.add(new TileItem("name2", "desc2"));
+        til.add(new TileItem("name3", "desc3"));
+        til.add(new TileItem("name4", "desc4"));
+
+        Adapter a = new Adapter(til);
+        recyclerView.setAdapter(a);
+
     }
 
     public void CreateNotificationChannel () {
