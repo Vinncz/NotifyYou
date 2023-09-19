@@ -1,27 +1,22 @@
-package com.example.notifyyou;
+package com.example.notifyyou.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.notifyyou.Models.TileItem;
-import com.example.notifyyou.RecyclerView.Adapter;
-
-import java.util.ArrayList;
+import com.example.notifyyou.Factories.NotificationFactory;
+import com.example.notifyyou.R;
+import com.example.notifyyou.Utils.NotificationHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CreateNotificationChannel();
+        NotificationHelper nh = new NotificationHelper((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+        nh.CreateNotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
 
         Button b = findViewById(R.id.NotificationButton);
         EditText title = findViewById(R.id.CustomNotificationHead);
@@ -42,12 +38,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Notification n = new NotificationCompat.Builder(MainActivity.this, channelId)
-                        .setOngoing(true)
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle(title.getText())
-                        .setContentText(body.getText())
-                        .build();
+                Notification n = NotificationFactory.CreatePresistentNotification(MainActivity.this, channelId, title.getText().toString(), body.getText().toString());
 
                 NotificationManagerCompat nm = NotificationManagerCompat.from(MainActivity.this);
 
@@ -67,24 +58,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.RecyclerView);
-
-        ArrayList<TileItem> til = new ArrayList<>();
-        til.add(new TileItem("name1", "desc1"));
-        til.add(new TileItem("name2", "desc2"));
-        til.add(new TileItem("name3", "desc3"));
-        til.add(new TileItem("name4", "desc4"));
-
-        Adapter a = new Adapter(til);
-        recyclerView.setAdapter(a);
-
-    }
-
-    public void CreateNotificationChannel () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);
-        }
+//        RecyclerView recyclerView = findViewById(R.id.RecyclerView);
+//
+//        ArrayList<TileItem> til = new ArrayList<>();
+//        til.add(new TileItem("name1", "desc1"));
+//        til.add(new TileItem("name2", "desc2"));
+//        til.add(new TileItem("name3", "desc3"));
+//        til.add(new TileItem("name4", "desc4"));
+//
+//        Adapter a = new Adapter(til);
+//        recyclerView.setAdapter(a);
     }
 }
