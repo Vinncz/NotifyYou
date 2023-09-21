@@ -1,5 +1,7 @@
 package com.example.notifyyou.Repositories;
 
+import android.content.SharedPreferences;
+
 import com.example.notifyyou.Models.TileItem;
 
 import java.util.ArrayList;
@@ -18,6 +20,10 @@ public class TileItemRepository {
     public static TileItem Get (int _tileId) {
 //        return TileItem::find(_tileId);
         return null;
+    }
+
+    public static Boolean Post (TileItem ti) {
+        return true;
     }
 
 }
