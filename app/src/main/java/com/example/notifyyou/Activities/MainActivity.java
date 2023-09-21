@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
                         } else if (itemId == R.id.newTileItem) {
                             selectedFragment = new NewFragment();
-                            SharedPreferences sp = getSharedPreferences("", MODE_PRIVATE);
+
                         }
 
                         if (selectedFragment != null) {
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                             transaction.replace(R.id.fragmentContainerView, selectedFragment);
                             transaction.commit();
                         }
+
                         return true;
                     }
                 });

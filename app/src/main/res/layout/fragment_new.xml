@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.NewFragment">
+    tools:context=".Fragments.NewFragment"
+    android:layout_marginTop="24dp">
 
 
     <LinearLayout
@@ -11,27 +12,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/CustomNotificationHead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Notification head"
-            android:inputType="text" />
+<!--        <EditText-->
+<!--            android:id="@+id/CustomNotificationHead"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:ems="10"-->
+<!--            android:hint="Notification head"-->
+<!--            android:inputType="text" />-->
 
-        <EditText
-            android:id="@+id/CustomNotificationBody"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Notification body"
-            android:inputType="text" />
+            android:hint="Task Name"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/CustomNotificationHead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+<!--        <EditText-->
+<!--            android:id="@+id/CustomNotificationBody"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:ems="10"-->
+<!--            android:hint="Notification body"-->
+<!--            android:inputType="text" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Task Description"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/CustomNotificationBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/NotificationButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Make Notification" />
+            android:text="Submit"
+            android:height="56dp"
+            style="@style/Widget.Material3.Button.Icon"
+        />
 
     </LinearLayout>
 

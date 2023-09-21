@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.notifyyou.R;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,22 +59,8 @@ public class Home extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-
-//        ExtendedFloatingActionButton efab = v.findViewById(R.id.NewTileItemButton);
-//        efab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NewFragment fragment = new NewFragment(); // Replace with your actual fragment class
-//                transaction.replace(R.id.fragmentContainerView, fragment); // R.id.fragment_container is the ID of the container where you want to add the fragment
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-//            }
-//        });
 
         return v;
     }

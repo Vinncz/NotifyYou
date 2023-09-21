@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.Home">
+    tools:context=".Fragments.Home"
+    android:layout_marginTop="24dp">
 
 
     <LinearLayout
@@ -17,12 +18,17 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pinned TileItems" />
+            android:text="Pinned TileItems"
+            android:textSize="18dp"
+            android:layout_marginBottom="8dp"
+        />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pinnedTileItems"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+        >
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -30,7 +36,11 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My TileItems Collection" />
+            android:text="My TileItems Collection"
+            android:textSize="18dp"
+            android:layout_marginBottom="8dp"
+
+        />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tileItems"
