@@ -71,7 +71,7 @@ public class Home extends Fragment {
 
         ArrayList<TileItem> items = new ArrayList<TileItem>();
         items.add(new TileItem("Bawa konci inggris", "jangan lupa"));
-        items.add(new TileItem("Contoh kalimat yang panjang banget dah dih duh deh doh sa si su se so 1 2 3 4 5 6 7 8 9", "iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget"));
+        items.add(new TileItem("Contoh kalimat yang panjang banget dah dih duh deh doh sa si su se so 1 2 3 4 5 6 7 8 9 Contoh kalimat yang panjang banget dah dih duh deh doh sa si su se so 1 2 3 4 5 6 7 8 9", "iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget"));
         items.add(new TileItem("Bawa regal", "jangan lupa"));
         items.add(new TileItem("Bawa regal", "jangan lupa"));
 
