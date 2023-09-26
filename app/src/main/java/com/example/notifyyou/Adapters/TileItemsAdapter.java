@@ -17,23 +17,22 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItemsAdapter.ViewHolder> {
-
+public class TileItemsAdapter extends RecyclerView.Adapter<TileItemsAdapter.ViewHolder> {
     private ArrayList<TileItem> itemList;
 
-    public PinnedTileItemsAdapter(ArrayList<TileItem> itemList) {
+    public TileItemsAdapter (ArrayList<TileItem> itemList) {
         this.itemList = itemList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pinned_tile_items_layout, parent, false);
-        return new ViewHolder(view);
+    public TileItemsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_items_layout, parent, false);
+        return new TileItemsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TileItemsAdapter.ViewHolder holder, int position) {
         TileItem item = itemList.get(position);
         holder.bind(item);
     }
@@ -102,6 +101,4 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
             body.setMaxLines(3);
         }
     }
-
-
 }

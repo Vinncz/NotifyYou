@@ -92,6 +92,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu"
+        app:layout_dodgeInsetEdges="end"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

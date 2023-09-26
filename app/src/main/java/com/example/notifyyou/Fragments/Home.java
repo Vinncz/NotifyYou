@@ -3,8 +3,6 @@ package com.example.notifyyou.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.notifyyou.Adapters.PinnedTileItemsAdapter;
+import com.example.notifyyou.Adapters.TileItemsAdapter;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 
@@ -69,20 +68,35 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ArrayList<TileItem> items = new ArrayList<TileItem>();
-        items.add(new TileItem("Bawa konci inggris", "jangan lupa"));
-        items.add(new TileItem("Contoh kalimat yang panjang banget dah dih duh deh doh sa si su se so 1 2 3 4 5 6 7 8 9 Contoh kalimat yang panjang banget dah dih duh deh doh sa si su se so 1 2 3 4 5 6 7 8 9", "iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget iya ini buat ngetes aja apa yang terjadi kalo teksnya panjanggg banget nget nget"));
-        items.add(new TileItem("Bawa regal", "jangan lupa"));
-        items.add(new TileItem("Bawa regal", "jangan lupa"));
+        ArrayList<TileItem> items = new ArrayList<>();
+        items.add(new TileItem("Do chores", "Wash dishes, do laundry, take trash out"));
+        items.add(new TileItem("Defrost tomorrow's lunch", "Don't forget this!"));
+        items.add(new TileItem("Follow up with SSC", "Request an internship letter"));
+        items.add(new TileItem("Do assignments", "AOL Framework Layer Architecture, AOL Operating System, AOL Mobile Programming, Make a prototype for Entrepreneurship Market Validation, Final Project for OOAD LAB"));
+
+        /* --------------------------------------------------------------------------- */
 
         PinnedTileItemsAdapter ptia = new PinnedTileItemsAdapter(items);
-        RecyclerView pinnedTileItems = (RecyclerView) v.findViewById(R.id.pinnedTileItems);
+        RecyclerView pinnedTileItems = v.findViewById(R.id.pinnedTileItems);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
-        pinnedTileItems.setLayoutManager(layoutManager);
-        pinnedTileItems.setPadding(8, 0, 8, 0);
+        LinearLayoutManager ptiaLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        pinnedTileItems.setLayoutManager(ptiaLayoutManager);
+        pinnedTileItems.setPadding(0, 8, 0, 8);
 
         pinnedTileItems.setAdapter(ptia);
+
+        /* --------------------------------------------------------------------------- */
+
+        TileItemsAdapter tia = new TileItemsAdapter(items);
+        RecyclerView tileItems = v.findViewById(R.id.tileItems);
+
+        LinearLayoutManager tiaLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
+        tileItems.setLayoutManager(tiaLayoutManager);
+        tileItems.setPadding(0, 16, 0, 0);
+
+        tileItems.setAdapter(tia);
+
+        /* --------------------------------------------------------------------------- */
 
         return v;
     }
