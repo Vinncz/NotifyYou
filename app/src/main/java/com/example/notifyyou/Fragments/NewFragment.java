@@ -17,7 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.notifyyou.Controllers.NotificationController;
+import com.example.notifyyou.Controllers.TileItemController;
 import com.example.notifyyou.Factories.NotificationFactory;
+import com.example.notifyyou.Factories.TileItemFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.Repositories.TileItemRepository;
@@ -38,11 +41,6 @@ public class NewFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    static final String channelId = "NotifyYouNotificationChannelId";
-    static int notificationId = 0;
-    static final String channelName = "NotifyYouNotificationChannelName";
-
 
     public NewFragment() {
         // Required empty public constructor
@@ -75,17 +73,17 @@ public class NewFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    private static int notificationId = 0;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_new, container, false);
-        NotificationHelper nh = new NotificationHelper((NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE));
-        nh.CreateNotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
 
         Button b = v.findViewById(R.id.NotificationButton);
         EditText title = v.findViewById(R.id.CustomNotificationHead);
         EditText body = v.findViewById(R.id.CustomNotificationBody);
+
+        NotificationController nc = new NotificationController(NotificationManagerCompat.from(v.getContext()));
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,28 +91,24 @@ public class NewFragment extends Fragment {
                 String notificationTitle = title.getText().toString();
                 String notificationBody = body.getText().toString();
 
-                TileItem ti = new TileItem(notificationTitle, notificationBody);
-                TileItemRepository.Post(ti);
+                TileItemController tic = new TileItemController();
+                Boolean isValid = tic.validate(notificationTitle, notificationBody);
 
-                Notification n = NotificationFactory.CreatePresistentNotification(v.getContext(), channelId, notificationTitle, notificationBody);
+                if (isValid) {
+                    TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
+                    TileItemRepository tir = new TileItemRepository(v.getContext());
+                    tir.Post(ti);
 
-                NotificationManagerCompat nm = NotificationManagerCompat.from(v.getContext());
+                    Notification n = NotificationFactory.CreatePersistentNotificationForDefaultChannelId(v.getContext(), notificationTitle, notificationBody);
+                    nc.Notify(notificationId++, n);
 
-                if (ActivityCompat.checkSelfPermission(v.getContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    Toast.makeText(v.getContext(), "You did not enable notification permission for this app", Toast.LENGTH_LONG).show();
-                    return;
+                } else {
+                    Toast.makeText(getContext(), "Title and Body cannot be empty, and must have at least 3 characters!", Toast.LENGTH_SHORT).show();
                 }
 
-                nm.notify(notificationId++, n);
             }
         });
+
         return v;
     }
 }

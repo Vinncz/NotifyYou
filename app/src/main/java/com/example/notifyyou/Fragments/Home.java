@@ -14,6 +14,7 @@ import com.example.notifyyou.Adapters.PinnedTileItemsAdapter;
 import com.example.notifyyou.Adapters.TileItemsAdapter;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
+import com.example.notifyyou.Repositories.TileItemRepository;
 
 import java.util.ArrayList;
 
@@ -68,36 +69,19 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ArrayList<TileItem> items = new ArrayList<>();
-        items.add(new TileItem("Do chores", "Wash dishes, do laundry, take trash out"));
-        items.add(new TileItem("Defrost tomorrow's lunch", "Don't forget this!"));
-        items.add(new TileItem("Follow up with SSC", "Request an internship letter"));
-        items.add(new TileItem("Do assignments", "AOL Framework Layer Architecture, AOL Operating System, AOL Mobile Programming, Make a prototype for Entrepreneurship Market Validation, Final Project for OOAD LAB"));
+        TileItemRepository tir = new TileItemRepository(v.getContext());
 
-        /* --------------------------------------------------------------------------- */
+        ArrayList<TileItem> pinned = tir.GetAllPinned();
+        ArrayList<TileItem> nonPinned = tir.GetNonPinned();
 
-        PinnedTileItemsAdapter ptia = new PinnedTileItemsAdapter(items);
-        RecyclerView pinnedTileItems = v.findViewById(R.id.pinnedTileItems);
-
-        LinearLayoutManager ptiaLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
-        pinnedTileItems.setLayoutManager(ptiaLayoutManager);
-        pinnedTileItems.setPadding(0, 8, 0, 8);
-
-        pinnedTileItems.setAdapter(ptia);
-
-        /* --------------------------------------------------------------------------- */
-
-        TileItemsAdapter tia = new TileItemsAdapter(items);
-        RecyclerView tileItems = v.findViewById(R.id.tileItems);
-
-        LinearLayoutManager tiaLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
-        tileItems.setLayoutManager(tiaLayoutManager);
-        tileItems.setPadding(0, 16, 0, 0);
-
-        tileItems.setAdapter(tia);
-
-        /* --------------------------------------------------------------------------- */
+        attachRecyclerViewAdapter(new PinnedTileItemsAdapter(pinned), v.findViewById(R.id.pinnedTileItems), new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        attachRecyclerViewAdapter(new TileItemsAdapter(nonPinned), v.findViewById(R.id.tileItems), new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false));
 
         return v;
+    }
+
+    private void attachRecyclerViewAdapter (RecyclerView.Adapter _adapter, RecyclerView _target, RecyclerView.LayoutManager _layoutManager) {
+        _target.setLayoutManager(_layoutManager);
+        _target.setAdapter(_adapter);
     }
 }

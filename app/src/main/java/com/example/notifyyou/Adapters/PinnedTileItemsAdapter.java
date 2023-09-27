@@ -25,6 +25,10 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
         this.itemList = itemList;
     }
 
+    public void ReplaceDataSet (ArrayList<TileItem> _dataset) {
+        itemList = _dataset;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,7 +44,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList != null ? itemList.size() : -1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,11 +52,11 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
         private final ImageButton edit, deactivate, delete;
 
         private void MakeSnackbar (String buttonName, String name, View itemView) {
-            final Integer MARGIN_BOTTOM = 225;
+            final int MARGIN_BOTTOM = 225;
 
             Snackbar s = Snackbar.make(itemView, buttonName + " button for " + name + " was pressed", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", view -> {
-                        Snackbar s1 = Snackbar.make(itemView, "Restored!", Snackbar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+                        Snackbar s1 = Snackbar.make(view, "Restored!", Snackbar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
 
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)  s1.getView().getLayoutParams();
 
@@ -96,6 +100,8 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
         }
 
         public void bind(TileItem item) {
+            if (item == null) return;
+
             title.setText(item.getTitle());
             title.setMaxLines(2);
             body.setText(item.getBody());

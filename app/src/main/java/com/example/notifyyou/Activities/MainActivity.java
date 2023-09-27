@@ -5,12 +5,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.notifyyou.Fragments.Home;
 import com.example.notifyyou.Fragments.NewFragment;
 import com.example.notifyyou.R;
+import com.example.notifyyou.Utils.CONFIG;
+import com.example.notifyyou.Utils.NotificationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,16 +24,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences sp = getSharedPreferences(CONFIG.channelName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor spe = sp.edit();
+
+        spe.putString(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, "");
+        spe.putString(CONFIG.sharedPreferencePinnedTileItemsChannel, "");
+
+        spe.commit();
+
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.fragmentContainerView, new Home());
         transaction.commit();
 
+        NotificationHelper nh = new NotificationHelper(
+                                        (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE),
+                                        MainActivity.this
+                                    );
+
         BottomNavigationView bnv = findViewById(R.id.bottomNavigationView);
         bnv.setOnItemSelectedListener(
-            new BottomNavigationView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem item) {
+                item -> {
                     Fragment selectedFragment = null;
                     int itemId = item.getItemId();
 
@@ -41,14 +57,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (selectedFragment != null) {
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.replace(R.id.fragmentContainerView, selectedFragment);
-                        transaction.commit();
+                        FragmentTransaction transaction1 = manager.beginTransaction();
+                        transaction1.replace(R.id.fragmentContainerView, selectedFragment);
+                        transaction1.commit();
                     }
 
                     return true;
                 }
-            }
         );
 
     }

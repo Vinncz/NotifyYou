@@ -39,7 +39,7 @@ public class TileItemsAdapter extends RecyclerView.Adapter<TileItemsAdapter.View
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemList != null ? itemList.size() : -1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,6 +95,8 @@ public class TileItemsAdapter extends RecyclerView.Adapter<TileItemsAdapter.View
         }
 
         public void bind(TileItem item) {
+            if (item == null) return;
+
             title.setText(item.getTitle());
             title.setMaxLines(2);
             body.setText(item.getBody());
