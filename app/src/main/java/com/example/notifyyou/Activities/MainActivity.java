@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(CONFIG.channelName, Context.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
 
-        spe.putString(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, "");
-        spe.putString(CONFIG.sharedPreferencePinnedTileItemsChannel, "");
-
-        spe.commit();
+//        spe.putString(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, "");
+//        spe.putString(CONFIG.sharedPreferencePinnedTileItemsChannel, "");
+//
+//        spe.commit();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();

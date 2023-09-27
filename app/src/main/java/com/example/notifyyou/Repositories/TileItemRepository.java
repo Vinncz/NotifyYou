@@ -7,13 +7,17 @@ import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.Utils.CONFIG;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TileItemRepository {
     private static SharedPreferences db;
     private static SharedPreferences.Editor editor;
     private static Gson g = new GsonBuilder().setPrettyPrinting().create();
+    private static Type ArrayListWithTileItemType = new TypeToken<ArrayList<TileItem>>() {}.getType();
 
     public TileItemRepository (Context _context) {
         db = _context.getSharedPreferences(CONFIG.channelName, Context.MODE_PRIVATE);
@@ -23,38 +27,29 @@ public class TileItemRepository {
     public ArrayList<TileItem> GetAllTiles () {
         ArrayList<TileItem> tis = new ArrayList<>();
 
-        tis.add(new TileItem("Do chores", "Wash dishes, do laundry, take trash out"));
-        tis.add(new TileItem("Defrost tomorrow's lunch", "Don't forget this!"));
-        tis.add(new TileItem("Follow up with SSC", "Request an internship letter"));
-        tis.add(new TileItem("Do assignments", "AOL Framework Layer Architecture, AOL Operating System, AOL Mobile Programming, Make a prototype for Entrepreneurship Market Validation, Final Project for OOAD LAB"));
+        tis.addAll(GetAllPinned());
+        tis.addAll(GetNonPinned());
 
         return tis;
     }
 
     public ArrayList<TileItem> GetAllPinned () {
-        ArrayList<TileItem> tis = new ArrayList<>();
+        // masih gapaham kenapa perlu di retrieve sebagai string dulu
+        String tis = Retrieve(CONFIG.sharedPreferencePinnedTileItemsChannel, "", String.class);
+        Log("YANG DIDAPET DARI GETALLPINNED:\n" + tis);
 
-        String s = Retrieve(CONFIG.sharedPreferencePinnedTileItemsChannel, tis, String.class);
-        tis.add(FromJson(s, TileItem.class));
-//        tis.add(new TileItem("Do chores", "Wash dishes, do laundry, take trash out"));
-//        tis.add(new TileItem("Defrost tomorrow's lunch", "Don't forget this!"));
-//        tis.add(new TileItem("Follow up with SSC", "Request an internship letter"));
-//        tis.add(new TileItem("Do assignments", "AOL Framework Layer Architecture, AOL Operating System, AOL Mobile Programming, Make a prototype for Entrepreneurship Market Validation, Final Project for OOAD LAB"));
-
-        return tis;
+        return FromJson(tis, ArrayListWithTileItemType, new ArrayList<TileItem>());
     }
 
     public ArrayList<TileItem> GetNonPinned () {
-        ArrayList<TileItem> tis = new ArrayList<>();
+        // masih gapaham kenapa perlu di retrieve sebagai string dulu
+        String tis = Retrieve(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, "", String.class);
+        Log("YANG DIDAPET DARI SHAREDPREFERENCES:\n" + tis);
 
-        String s = Retrieve(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, tis, String.class);
-        tis.add(FromJson(s, TileItem.class));
-//        tis.add(new TileItem("Non-pinned TileItem: Do chores", "Wash dishes, do laundry, take trash out"));
-//        tis.add(new TileItem("Non-pinned TileItem: Defrost tomorrow's lunch", "Don't forget this!"));
-//        tis.add(new TileItem("Non-pinned TileItem: Follow up with SSC", "Request an internship letter"));
-//        tis.add(new TileItem("Non-pinned TileItem: Do assignments", "AOL Framework Layer Architecture, AOL Operating System, AOL Mobile Programming, Make a prototype for Entrepreneurship Market Validation, Final Project for OOAD LAB"));
+        ArrayList items = FromJson(tis, ArrayListWithTileItemType, new ArrayList<TileItem>());
+        Log("KALO [YANG DIDAPET TADI] DIUBAH DARI [JSON] KE [OBJECTNYA]:\n" + ToJson(items));
 
-        return tis;
+        return items;
     }
 
     public TileItem Get (int _tileId) {
@@ -64,19 +59,15 @@ public class TileItemRepository {
 
     public Boolean Post (TileItem ti) {
         String json = ToJson(ti);
-        System.out.println("\n\n" + json);
+        Log("YANG BARU DISUBMIT:\n" + json);
 
-        TileItem fromJson = FromJson(json, TileItem.class);
+        ArrayList<TileItem> existingItems = GetNonPinned();
 
-        /* NOT DONE
-        *
-        *  Value lama harus diappend ke arraylist
-        *  arraylsit itu nntinya disimpen lagi
-        *  */
+        existingItems.add(ti);
 
-        Put(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, json);
+        json = ToJson(existingItems);
 
-        return true;
+        return Put(CONFIG.sharedPreferenceUnpinnedTileItemsChannel, json);
     }
 
     private void Log (String _s) {
@@ -91,12 +82,16 @@ public class TileItemRepository {
         return g.toJson(_value);
     }
 
-    private <T> T FromJson (String _value, Class<T> _class) {
-        Log(_value, "FromJSON");
+    private <T> T FromJson (String _value, Type _class) {
         return g.fromJson(_value, _class);
     }
 
-    private <T> T Retrieve (String _resourcePath, Object _fallbackValue, Class<T> _resourceClass) {
+    private <T> T FromJson (String _value, Type _class, Object _fallbackValue) {
+        Object o = g.fromJson(_value, _class);
+        return (T) (o != null ? o : _fallbackValue);
+    }
+
+    private <T> T Retrieve (String _resourcePath, Object _fallbackValue, Type _resourceClass) {
         String retrievedData = db.getString(_resourcePath, ToJson(_fallbackValue));
         return FromJson(retrievedData, _resourceClass);
     }
