@@ -2,6 +2,13 @@ package com.example.notifyyou.Models;
 
 public class TileItem {
 
+    /*
+    * TODO:
+    *  1. Buat SharedPreference yang tugasnya untuk nge-track used-id untuk setiap object TileItem
+    *  2. Ketika new TileItem dibuat, maka used-id harus di-increment
+    */
+
+    private Integer id;
     private String title;
     private String body;
 
@@ -16,6 +23,10 @@ public class TileItem {
 
     public void setBody (String body) {
         this.body = body;
+    }
+
+    public Integer getId () {
+        return this.id;
     }
 
     public String getTitle () {
