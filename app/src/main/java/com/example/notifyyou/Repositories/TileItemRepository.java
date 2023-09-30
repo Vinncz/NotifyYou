@@ -11,13 +11,32 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class TileItemRepository {
     private static SharedPreferences db;
     private static SharedPreferences.Editor editor;
-    private static Gson g = new GsonBuilder().setPrettyPrinting().create();
-    private static Type ArrayListWithTileItemType = new TypeToken<ArrayList<TileItem>>() {}.getType();
+    private static final Gson g = new GsonBuilder().setPrettyPrinting().create();
+    private static final Type ArrayListWithTileItemType = new TypeToken<ArrayList<TileItem>>() {}.getType();
+
+    /*
+    * CACHE HANYA AKAN MENJADI INVALID
+    * JIKA DAN HANYA JIKA ADA PERUBAHAN PADA
+    * SHAREDPREFERENCES DENGAN KEY CONFIG.sharedPreferencePinnedTileItemsChannel
+    * DAN DENGAN KEY CONFIG.sharedPreferenceUnpinnedTileItemsChannel
+    *
+    * MAKA DARI ITU:
+    * - SETIAP METHOD YANG MENGUBAH DATA DI SHAREDPREFERENCES
+    *   HARUS KOORDINASI DENGAN GLOBAL VARIABLE cacheIsValid.
+    *   (DELTE, UPDATE, CREATE)
+    * - SETIAP METHOD YANG MENGUBAH DATA DI SHAREDPREFERENCES
+    *   HANYA BISA MENGUBAH VARIABLE cacheIsValid MENJADI FALSE
+    * - SETIAP METHOD YANG MEMBACA DATA DARI SHAREDPREFERENCES
+     *   HANYA BISA MENGUBAH VARIABLE cacheIsValid MENJADI TRUE
+    */
+    private ArrayList<TileItem> cachedTiles;
+    private boolean cacheIsValid = false;
+
+
 
     public TileItemRepository (Context _context) {
         db = _context.getSharedPreferences(CONFIG.channelName, Context.MODE_PRIVATE);
@@ -25,15 +44,22 @@ public class TileItemRepository {
     }
 
     public ArrayList<TileItem> GetAllTiles () {
+        if (cacheIsValid) return cachedTiles;
+
         ArrayList<TileItem> tis = new ArrayList<>();
 
         tis.addAll(GetAllPinned());
         tis.addAll(GetNonPinned());
 
+        cachedTiles = tis;
+        cacheIsValid = true;
+
         return tis;
     }
 
     public ArrayList<TileItem> GetAllPinned () {
+        if (cacheIsValid) return cachedTiles;
+
         return FromJson(
                 Retrieve(CONFIG.sharedPreferencePinnedTileItemsChannel, ""),
                 ArrayListWithTileItemType,
@@ -50,6 +76,25 @@ public class TileItemRepository {
     }
 
     public TileItem Get (int _tileId) {
+
+        /*
+            UNTUK MEMPERCEPAT METHOD GET() DARI SETIAP KALI MEMBACA SHARED PREFERENCES
+            DAN MELAKUKAN LINEAR SEARCH DARI SETIAP RECORDS UNTUK MENCARI ID YANG SAMA DENGAN _tileID:
+
+            1. buat array baru yang hanya simpen ID milik TileItems.
+            2. kalo mau Get() suatu TileItem, cari di lookup array apakah id tersebut exists.
+            3. jika ada, lihat di index berapa ID tersebut tersimpan pada array, dan tinggal lookup ke JSON tree-nya sendiri.
+                 (misal id "1" berada di index ke-2, maka tinggal GetAllTiles().get(2) <-- dimana 2 adalah index ke-n )
+                 (ada perlunya jika hasil dari GetAllTiles disimpan ke variabel untuk caching)
+            4. jika tdk ada, throw error.
+
+            public List<String> getValuesForGivenKey(String jsonArrayStr, String key) {
+                JSONArray jsonArray = new JSONArray(jsonArrayStr);
+                return IntStream.range(0, jsonArray.length())
+                  .mapToObj(index -> ((JSONObject)jsonArray.get(index)).optString(key))
+                  .collect(Collectors.toList());
+            }
+        */
 
         return null;
     }
@@ -81,11 +126,7 @@ public class TileItemRepository {
         System.out.println("\n\n" + _s + "\n\n");
     }
 
-    private void Log (String _s, String _whoCalled) {
-        System.out.println(_whoCalled + " called; \n\n" + _s + "\n\n");
-    }
-
-    private <T> String ToJson (Object _value) {
+    private String ToJson (Object _value) {
         return g.toJson(_value);
     }
 
@@ -114,7 +155,7 @@ public class TileItemRepository {
                );
     }
 
-    private <T> void Write (String _placementPath, String _value) {
+    private void Write (String _placementPath, String _value) {
 
         /* TODO: HERE SHOULD NOT BE ANYMORE VALIDATION BEYOND THIS POINT */
 
@@ -125,14 +166,14 @@ public class TileItemRepository {
             preparedData = ToJson(_value);
         } catch (Error e) {
             /* If its throwing an Error, then you know that the param you receive is invalid, and you must terminate the SP writing */
-            Log("CAUGHT ERROR WHEN WRITING INTO SHARED PREFERENCE" + e.toString());
-//            throw e;
+//            Log("CAUGHT ERROR WHEN WRITING INTO SHARED PREFERENCE" + e.toString());
+            throw e;
 
-            return;
         }
 
         /* Put the data into SharedPreference */
         editor.putString(_placementPath, preparedData);
+        cacheIsValid = false;
     }
 
     public Boolean CommitChanges () {

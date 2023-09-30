@@ -1,11 +1,43 @@
 package com.example.notifyyou.Controllers;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
+import com.example.notifyyou.Models.TileItem;
+import com.example.notifyyou.Repositories.TileItemRepository;
+
+import java.util.ArrayList;
+
 public class TileItemController {
+
+    private static TileItemRepository tir;
+
+    public TileItemController (Context _context) {
+        tir = new TileItemRepository(_context);
+    }
+
+
+
+    public ArrayList<TileItem> GetAllTiles () {
+        return tir.GetAllTiles();
+    }
+
+    public ArrayList<TileItem> GetAllPinned () {
+        return tir.GetAllPinned();
+    }
+
+    public ArrayList<TileItem> GetNonPinned () {
+        return tir.GetNonPinned();
+    }
+
+
 
     public Boolean validate (String _title, String _body) {
         return checkTitle(_title) && checkBody(_body);
     }
 
+    @NonNull
     private Boolean checkTitle (String _t) {
         boolean flag = true;
 
@@ -15,6 +47,7 @@ public class TileItemController {
         return flag;
     }
 
+    @NonNull
     private Boolean checkBody (String _b) {
         boolean flag = true;
 

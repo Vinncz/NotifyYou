@@ -91,7 +91,7 @@ public class NewFragment extends Fragment {
                 String notificationTitle = title.getText().toString();
                 String notificationBody = body.getText().toString();
 
-                TileItemController tic = new TileItemController();
+                TileItemController tic = new TileItemController(v.getContext());
                 Boolean isValid = tic.validate(notificationTitle, notificationBody);
 
                 if (isValid) {
