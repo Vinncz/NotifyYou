@@ -1,40 +1,62 @@
 package com.example.notifyyou.Models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.sql.Timestamp;
+
+@Entity(tableName = "tile_items")
 public class TileItem {
 
-    /*
-    * TODO:
-    *  1. Buat SharedPreference yang tugasnya untuk nge-track used-id untuk setiap object TileItem
-    *  2. Ketika new TileItem dibuat, maka used-id harus di-increment
-    */
-
+    @PrimaryKey(autoGenerate = true)
     private Integer id;
+
     private String title;
     private String body;
+    private Boolean isPinned;
+    private Boolean alarmIsActive;
+    private String selectedTimeForAlarm;
+    private final Timestamp createdAt;
+    private Timestamp modifiedAt;
 
+    /* CONSTRUCTOR */
     public TileItem (String _title, String _body) {
         this.title = _title;
+        this.body  = _body;
+        this.isPinned = false;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.modifiedAt = this.createdAt;
+    }
+
+
+    /* SETTERS */
+    public void setId (Integer _id) {
+        this.id = _id;
+    }
+    public void setTitle (String _title) {
+        this.title = _title;
+    }
+    public void setBody (String _body) {
         this.body = _body;
     }
-
-    public String getBody () {
-        return body;
+    public void setIsPinned (Boolean _pinned) { this.isPinned = _pinned; }
+    public void setAlarmIsActive (Boolean _status) {
+        this.alarmIsActive = _status;
     }
+    public void setTimeForAlarm (String _selectedTimeForAlarm) { this.selectedTimeForAlarm = _selectedTimeForAlarm; }
+    public void setModifiedAt (Timestamp _timestamp) { this.modifiedAt = _timestamp; }
 
-    public void setBody (String body) {
-        this.body = body;
-    }
 
-    public Integer getId () {
-        return this.id;
+    /* GETTERS */
+    public Integer getId () { return id; }
+    public String getTitle () { return title; }
+    public String getBody () { return body; }
+    public Boolean getIsPinned () { return isPinned; }
+    public Boolean getAlarmIsActive () {
+        return alarmIsActive;
     }
-
-    public String getTitle () {
-        return this.title;
-    }
-
-    public void setTitle (String title) {
-        this.title = title;
-    }
+    public String getTimeForAlarm () { return selectedTimeForAlarm; }
+    public Timestamp getCreatedAt () { return createdAt; }
+    public Timestamp getModifiedAt () { return modifiedAt; }
 
 }

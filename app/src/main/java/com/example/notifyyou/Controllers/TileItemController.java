@@ -5,16 +5,16 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.notifyyou.Models.TileItem;
-import com.example.notifyyou.Repositories.TileItemRepository;
+import com.example.notifyyou.Repositories.TileItemRepositoryOLD;
 
 import java.util.ArrayList;
 
 public class TileItemController {
 
-    private static TileItemRepository tir;
+    private static TileItemRepositoryOLD tir;
 
     public TileItemController (Context _context) {
-        tir = new TileItemRepository(_context);
+        tir = new TileItemRepositoryOLD(_context);
     }
 
 

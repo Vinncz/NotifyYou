@@ -14,7 +14,7 @@ import com.example.notifyyou.Adapters.PinnedTileItemsAdapter;
 import com.example.notifyyou.Adapters.TileItemsAdapter;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
-import com.example.notifyyou.Repositories.TileItemRepository;
+import com.example.notifyyou.Repositories.TileItemRepositoryOLD;
 
 import java.util.ArrayList;
 
@@ -69,7 +69,7 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        TileItemRepository tir = new TileItemRepository(v.getContext());
+        TileItemRepositoryOLD tir = new TileItemRepositoryOLD(v.getContext());
 
         ArrayList<TileItem> pinned = tir.GetAllPinned();
         ArrayList<TileItem> nonPinned = tir.GetNonPinned();

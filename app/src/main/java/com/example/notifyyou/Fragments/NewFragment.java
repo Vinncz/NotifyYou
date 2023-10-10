@@ -1,12 +1,8 @@
 package com.example.notifyyou.Fragments;
 
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
@@ -23,8 +19,7 @@ import com.example.notifyyou.Factories.NotificationFactory;
 import com.example.notifyyou.Factories.TileItemFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
-import com.example.notifyyou.Repositories.TileItemRepository;
-import com.example.notifyyou.Utils.NotificationHelper;
+import com.example.notifyyou.Repositories.TileItemRepositoryOLD;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,7 +91,7 @@ public class NewFragment extends Fragment {
 
                 if (isValid) {
                     TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
-                    TileItemRepository tir = new TileItemRepository(v.getContext());
+                    TileItemRepositoryOLD tir = new TileItemRepositoryOLD(v.getContext());
                     tir.Post(ti);
 
                     Notification n = NotificationFactory.CreatePersistentNotificationForDefaultChannelId(v.getContext(), notificationTitle, notificationBody);
