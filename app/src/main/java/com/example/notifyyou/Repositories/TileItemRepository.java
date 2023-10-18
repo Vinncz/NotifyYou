@@ -1,111 +1,72 @@
 package com.example.notifyyou.Repositories;
 
 import android.app.Application;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.notifyyou.Databases.TileItemDatabase;
 import com.example.notifyyou.Models.TileItem;
-import com.example.notifyyou.ViewModels.TileItemDAO;
+import com.example.notifyyou.DataAccessObjects.TileItemDAO;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TileItemRepository {
-    private TileItemDAO tileItemDAO;
-    private LiveData<ArrayList<TileItem>> pinedTileItems;
-    private LiveData<ArrayList<TileItem>> unpinedTileItems;
+    private TileItemDAO dao;
+    private LiveData<List<TileItem>> allTileItems;
+
+
+    /* Asynchronous Tasks Handler */
+    ExecutorService es = Executors.newSingleThreadExecutor();
+    Handler h = new Handler(Looper.getMainLooper());
 
 
     public TileItemRepository(Application _app) {
         TileItemDatabase db = TileItemDatabase.getInstance(_app);
-        tileItemDAO = db.tileItemDAO();
+        dao = db.dao();
 
-        pinedTileItems = tileItemDAO.getAllPinned();
-        unpinedTileItems = tileItemDAO.getAllUnpinned();
+        allTileItems = dao.getAll();
     }
 
 
     /* GET */
-    public LiveData<ArrayList<TileItem>> getPinedTileItems () {
-        return pinedTileItems;
+    public LiveData<TileItem> getLatest () {
+        return dao.getLatest();
     }
-    public LiveData<ArrayList<TileItem>> getUnpinedTileItems () {
-        return unpinedTileItems;
+    public LiveData<TileItem> get (Integer _id) {
+        return dao.get(_id);
     }
+    public LiveData<List<TileItem>> getAll () {
+        return dao.getAll();
+    }
+    public LiveData<List<TileItem>> getAllPinned () { return dao.getAllPinned(); }
+    public LiveData<List<TileItem>> getAllUnpinned () { return dao.getAllUnpinned(); }
 
 
     /* POST */
     public void insert (TileItem _ti) {
-        new InsertTileItemAsyncTask(tileItemDAO).execute(_ti);
-    }
-    private static class InsertTileItemAsyncTask extends AsyncTask<TileItem, Void, Void> {
-        private TileItemDAO tiDAO;
-
-        private InsertTileItemAsyncTask (TileItemDAO _tiDAO) {
-            this.tiDAO = _tiDAO;
-        }
-
-        @Override
-        protected Void doInBackground (TileItem... tileItems) {
-            tiDAO.insert(tileItems[0]);
-            return null;
-        }
+        es.execute(() -> dao.insert(_ti));
     }
 
 
     /* PATCH */
     public void update (TileItem _ti) {
-        new UpdateTileItemAsyncTask(tileItemDAO).execute(_ti);
-    }
-    private static class UpdateTileItemAsyncTask extends AsyncTask<TileItem, Void, Void> {
-        private TileItemDAO tiDAO;
-
-        private UpdateTileItemAsyncTask (TileItemDAO _tiDAO) {
-            this.tiDAO = _tiDAO;
-        }
-
-        @Override
-        protected Void doInBackground (TileItem... tileItems) {
-            tiDAO.update(tileItems[0]);
-            return null;
-        }
+        es.execute(() -> dao.update(_ti));
     }
 
 
     /* DELETE */
     public void delete (TileItem _ti) {
-        new DeleteTileItemAsyncTask(tileItemDAO).execute(_ti);
+        es.execute(() -> dao.delete(_ti));
     }
     public void deleteAll () {
-        new DeleteAllTileItemAsyncTask(tileItemDAO).execute();
-    }
-
-    private static class DeleteTileItemAsyncTask extends AsyncTask<TileItem, Void, Void> {
-        private TileItemDAO tiDAO;
-
-        private DeleteTileItemAsyncTask (TileItemDAO _tiDAO) {
-            this.tiDAO = _tiDAO;
-        }
-
-        @Override
-        protected Void doInBackground (TileItem... tileItems) {
-            tiDAO.delete(tileItems[0]);
-            return null;
-        }
-    }
-    private static class DeleteAllTileItemAsyncTask extends AsyncTask<Void, Void, Void> {
-        private TileItemDAO tiDAO;
-
-        private DeleteAllTileItemAsyncTask (TileItemDAO _tiDAO) {
-            this.tiDAO = _tiDAO;
-        }
-
-        @Override
-        protected Void doInBackground (Void... voids) {
-            tiDAO.deleteAll();
-            return null;
-        }
+        es.execute(() -> dao.deleteAll());
     }
 
 }

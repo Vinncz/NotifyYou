@@ -2,10 +2,14 @@ package com.example.notifyyou.Models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.example.notifyyou.Utils.Converters.TimestampConverter;
 
 import java.sql.Timestamp;
 
 @Entity(tableName = "tile_items")
+@TypeConverters({TimestampConverter.class})
 public class TileItem {
 
     @PrimaryKey(autoGenerate = true)
@@ -16,7 +20,7 @@ public class TileItem {
     private Boolean isPinned;
     private Boolean alarmIsActive;
     private String selectedTimeForAlarm;
-    private final Timestamp createdAt;
+    private Timestamp createdAt;
     private Timestamp modifiedAt;
 
     /* CONSTRUCTOR */
@@ -27,6 +31,7 @@ public class TileItem {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.modifiedAt = this.createdAt;
     }
+    public TileItem () {}
 
 
     /* SETTERS */
@@ -43,8 +48,9 @@ public class TileItem {
     public void setAlarmIsActive (Boolean _status) {
         this.alarmIsActive = _status;
     }
-    public void setTimeForAlarm (String _selectedTimeForAlarm) { this.selectedTimeForAlarm = _selectedTimeForAlarm; }
+    public void setSelectedTimeForAlarm (String _selectedTimeForAlarm) { this.selectedTimeForAlarm = _selectedTimeForAlarm; }
     public void setModifiedAt (Timestamp _timestamp) { this.modifiedAt = _timestamp; }
+    public void setCreatedAt (Timestamp _timestamp) { this.createdAt = _timestamp; }
 
 
     /* GETTERS */
@@ -55,7 +61,7 @@ public class TileItem {
     public Boolean getAlarmIsActive () {
         return alarmIsActive;
     }
-    public String getTimeForAlarm () { return selectedTimeForAlarm; }
+    public String getSelectedTimeForAlarm () { return selectedTimeForAlarm; }
     public Timestamp getCreatedAt () { return createdAt; }
     public Timestamp getModifiedAt () { return modifiedAt; }
 

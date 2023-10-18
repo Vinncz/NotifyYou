@@ -17,22 +17,22 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class TileItemsAdapter extends RecyclerView.Adapter<TileItemsAdapter.ViewHolder> {
+public class TileItemsAdapterOLD extends RecyclerView.Adapter<TileItemsAdapterOLD.ViewHolder> {
     private ArrayList<TileItem> itemList;
 
-    public TileItemsAdapter (ArrayList<TileItem> itemList) {
+    public TileItemsAdapterOLD (ArrayList<TileItem> itemList) {
         this.itemList = itemList;
     }
 
     @NonNull
     @Override
-    public TileItemsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TileItemsAdapterOLD.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_items_layout, parent, false);
-        return new TileItemsAdapter.ViewHolder(view);
+        return new TileItemsAdapterOLD.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TileItemsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TileItemsAdapterOLD.ViewHolder holder, int position) {
         TileItem item = itemList.get(position);
         holder.bind(item);
     }
@@ -80,16 +80,19 @@ public class TileItemsAdapter extends RecyclerView.Adapter<TileItemsAdapter.View
 
             edit.setOnClickListener(view -> {
                 TileItem ti = itemList.get(getAdapterPosition());
+                ti.setTitle("-1");
                 MakeSnackbar("Edit", ti.getTitle(), view);
             });
 
             deactivate.setOnClickListener(view -> {
                 TileItem ti = itemList.get(getAdapterPosition());
+                ti.setTitle("-1");
                 MakeSnackbar("Deactivate", ti.getTitle(), view);
             });
 
             delete.setOnClickListener(view -> {
                 TileItem ti = itemList.get(getAdapterPosition());
+                ti.setTitle("-1");
                 MakeSnackbar("Delete", ti.getTitle(), view);
             });
         }

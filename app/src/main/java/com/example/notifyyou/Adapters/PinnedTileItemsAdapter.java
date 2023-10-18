@@ -1,113 +1,142 @@
 package com.example.notifyyou.Adapters;
 
+import android.app.Notification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notifyyou.Controllers.NotificationController;
+import com.example.notifyyou.Factories.NotificationFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.notifyyou.ViewModels.TileItemViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItemsAdapter.ViewHolder> {
+public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItemsAdapter.TileItemHolder> implements settableTileItemList {
 
-    private ArrayList<TileItem> itemList;
+    private List<TileItem> tileItemList = new ArrayList<TileItem>();
+    private TileItemViewModel vm;
 
-    public PinnedTileItemsAdapter(ArrayList<TileItem> itemList) {
-        this.itemList = itemList;
-    }
-
-    public void ReplaceDataSet (ArrayList<TileItem> _dataset) {
-        itemList = _dataset;
+    /* Constructor */
+    public PinnedTileItemsAdapter (TileItemViewModel _vm) {
+        this.vm = _vm;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pinned_tile_items_layout, parent, false);
-        return new ViewHolder(view);
+    public TileItemHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_item, parent, false);
+
+        return new TileItemHolder(itemView);
+    }
+    @Override
+    public void onBindViewHolder (@NonNull TileItemHolder holder, int position) {
+        if (tileItemList.isEmpty()) {
+            holder.bindEmptyState();
+
+        } else {
+            holder.bindData(tileItemList.get(position));
+        }
+
+    }
+    @Override
+    public int getItemCount () {
+        return tileItemList.isEmpty() ? 1 : this.tileItemList.size();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TileItem item = itemList.get(position);
-        holder.bind(item);
+    public void setTileItemList (List<TileItem> _items) {
+        this.tileItemList.clear();
+
+        this.tileItemList = _items;
+        notifyDataSetChanged();
     }
 
-    @Override
-    public int getItemCount() {
-        return itemList != null ? itemList.size() : -1;
-    }
+    class TileItemHolder extends RecyclerView.ViewHolder {
+        private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned;
+        private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView title, body;
-        private final ImageButton edit, deactivate, delete;
-
-        private void MakeSnackbar (String buttonName, String name, View itemView) {
-            final int MARGIN_BOTTOM = 225;
-
-            Snackbar s = Snackbar.make(itemView, buttonName + " button for " + name + " was pressed", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", view -> {
-                        Snackbar s1 = Snackbar.make(view, "Restored!", Snackbar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-
-                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)  s1.getView().getLayoutParams();
-
-                        params.setMargins(0, 0, 0, MARGIN_BOTTOM);
-
-                        s1.getView().setLayoutParams(params);
-                        s1.show();
-                    })
-                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-
-            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) s.getView().getLayoutParams();
-
-            params.setMargins(0, 0, 0, MARGIN_BOTTOM);
-
-            s.getView().setLayoutParams(params);
-            s.show();
-        }
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            title = itemView.findViewById(R.id.title);
-            body = itemView.findViewById(R.id.body);
-            edit = itemView.findViewById(R.id.editButton);
-            deactivate = itemView.findViewById(R.id.deactivateButton);
-            delete = itemView.findViewById(R.id.deleteButton);
-
-            edit.setOnClickListener(view -> {
-                TileItem ti = itemList.get(getAdapterPosition());
-                MakeSnackbar("Edit", ti.getTitle(), view);
-            });
-
-            deactivate.setOnClickListener(view -> {
-                TileItem ti = itemList.get(getAdapterPosition());
-                MakeSnackbar("Deactivate", ti.getTitle(), view);
-            });
-
-            delete.setOnClickListener(view -> {
-                TileItem ti = itemList.get(getAdapterPosition());
-                MakeSnackbar("Delete", ti.getTitle(), view);
-            });
-        }
-
-        public void bind(TileItem item) {
-            if (item == null) return;
-
-            title.setText(item.getTitle());
+        public TileItemHolder bindData (TileItem _ti) {
             title.setMaxLines(2);
-            body.setText(item.getBody());
+
             body.setMaxLines(3);
+
+            if (_ti.getIsPinned()) {
+                unpinToggle.setVisibility(View.VISIBLE);
+                pinToggle.setVisibility(View.GONE);
+
+            } else {
+                pinToggle.setVisibility(View.VISIBLE);
+                unpinToggle.setVisibility(View.GONE);
+
+            }
+
+            pinToggle.setOnClickListener(v -> {
+                _ti.setIsPinned(true);
+                vm.update(_ti);
+                notifyDataSetChanged();
+            });
+
+            unpinToggle.setOnClickListener(v -> {
+                _ti.setIsPinned(false);
+                vm.update(_ti);
+                notifyDataSetChanged();
+            });
+
+            deleteToggle.setVisibility(View.VISIBLE);
+            deleteToggle.setOnClickListener(v -> {
+                vm.delete(_ti);
+                notifyDataSetChanged();
+            });
+
+            id.setVisibility(View.VISIBLE);;
+            id.setText(_ti.getId().toString());
+
+            isPinned.setVisibility(View.VISIBLE);
+            isPinned.setText(_ti.getIsPinned().toString());
+
+            title.setText(_ti.getTitle());
+            body.setText(_ti.getBody());
+
+            return this;
+        }
+
+        public TileItemHolder (@NonNull View itemView) {
+            super(itemView);
+
+            title= itemView.findViewById(R.id.title);
+
+            body = itemView.findViewById(R.id.body);
+
+            id = itemView.findViewById(R.id.id);
+
+            isPinned = itemView.findViewById(R.id.isPinned);
+
+            pinToggle = itemView.findViewById(R.id.pinTileItem);
+
+            unpinToggle = itemView.findViewById(R.id.unpinTileItem);
+
+            deleteToggle = itemView.findViewById(R.id.deleteTileItem);
+
+        }
+
+        public TileItemHolder bindEmptyState () {
+            title.setText("You haven't pinned anything!");
+            body.setText("Consider tapping the \"Pin\" button, below any TileItems, to create a notification for that particular item!");
+            id.setVisibility(View.GONE);
+            unpinToggle.setVisibility(View.GONE);
+            deleteToggle.setVisibility(View.GONE);
+            isPinned.setVisibility(View.GONE);
+            return this;
         }
     }
-
-
 }

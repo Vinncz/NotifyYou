@@ -1,10 +1,12 @@
-package com.example.notifyyou.Fragments;
+package com.example.notifyyou.Views.Fragments;
 
 import android.app.Notification;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.example.notifyyou.Factories.TileItemFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.Repositories.TileItemRepositoryOLD;
+import com.example.notifyyou.ViewModels.TileItemViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +35,14 @@ public class NewFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
+    private TileItemViewModel vm;
+    public NewFragment withViewModel (AndroidViewModel vm) {
+        this.vm = (TileItemViewModel) vm;
+        return this;
+    }
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,8 +79,6 @@ public class NewFragment extends Fragment {
         }
     }
 
-    private static int notificationId = 0;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_new, container, false);
@@ -78,30 +87,22 @@ public class NewFragment extends Fragment {
         EditText title = v.findViewById(R.id.CustomNotificationHead);
         EditText body = v.findViewById(R.id.CustomNotificationBody);
 
-        NotificationController nc = new NotificationController(NotificationManagerCompat.from(v.getContext()));
+        b.setOnClickListener(view -> {
+            String notificationTitle = title.getText().toString();
+            String notificationBody = body.getText().toString();
 
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String notificationTitle = title.getText().toString();
-                String notificationBody = body.getText().toString();
+            TileItemController tic = new TileItemController(v.getContext());
+            Boolean isValid = tic.validate(notificationTitle, notificationBody);
 
-                TileItemController tic = new TileItemController(v.getContext());
-                Boolean isValid = tic.validate(notificationTitle, notificationBody);
+            if (isValid) {
+                TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
+                vm.insert(ti);
 
-                if (isValid) {
-                    TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
-                    TileItemRepositoryOLD tir = new TileItemRepositoryOLD(v.getContext());
-                    tir.Post(ti);
-
-                    Notification n = NotificationFactory.CreatePersistentNotificationForDefaultChannelId(v.getContext(), notificationTitle, notificationBody);
-                    nc.Notify(notificationId++, n);
-
-                } else {
-                    Toast.makeText(getContext(), "Title and Body cannot be empty, and must have at least 3 characters!", Toast.LENGTH_SHORT).show();
-                }
+            } else {
+                Toast.makeText(getContext(), "Title and Body cannot be empty, and must have at least 3 characters!", Toast.LENGTH_SHORT).show();
 
             }
+
         });
 
         return v;

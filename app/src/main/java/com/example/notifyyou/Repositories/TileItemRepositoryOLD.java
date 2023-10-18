@@ -75,7 +75,7 @@ public class TileItemRepositoryOLD {
         );
     }
 
-    public TileItem Get (int _tileId) {
+    public TileItem Get (String _title) {
 
         /*
             UNTUK MEMPERCEPAT METHOD GET() DARI SETIAP KALI MEMBACA SHARED PREFERENCES
@@ -95,6 +95,12 @@ public class TileItemRepositoryOLD {
                   .collect(Collectors.toList());
             }
         */
+        ArrayList<TileItem> items = GetNonPinned();
+        for (TileItem i : items) {
+            if (i.getTitle().equals(_title)) {
+                return i;
+            }
+        }
 
         return null;
     }

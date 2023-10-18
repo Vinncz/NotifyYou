@@ -1,19 +1,24 @@
-package com.example.notifyyou.Utils;
+package com.example.notifyyou.Utils.Permissions;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.example.notifyyou.Utils.CONFIG;
 
 public class NotificationHelper {
 
@@ -27,28 +32,25 @@ public class NotificationHelper {
         InitializeDefaultNotificationChannel();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public void CheckPermission () {
-        NotificationManagerCompat nm = NotificationManagerCompat.from(this.a);
-
-        if (ActivityCompat.checkSelfPermission(this.a, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this.a, Manifest.permission.POST_NOTIFICATIONS)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this.a);
-                builder.setTitle("Permission Needed")
-                        .setMessage("Post Notifications")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                ActivityCompat.requestPermissions(a, new String[] {Manifest.permission.POST_NOTIFICATIONS}, 1);
-                            }
-                        });
-                builder.create().show();
+    public static void requestNotificationPolicyAccess (Context context, OnPermissionResultListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            if (!notificationManager.isNotificationPolicyAccessGranted()) {
+                Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                if (context instanceof Activity) {
+                    ((Activity) context).startActivityForResult(intent, PermissionManager.PERMISSION_REQUEST_CODE);
+                }
 
             } else {
-                ActivityCompat.requestPermissions(this.a, new String [] {Manifest.permission.POST_NOTIFICATIONS}, 1);
+                listener.onPermissionGranted("android.permission.SEND_NOTIFICATIONS");
+
             }
 
+        } else {
+            listener.onPermissionGranted("android.permission.SEND_NOTIFICATIONS");
+
         }
+
     }
 
     public void CreateNotificationChannel (String _channelId, String _channelName, int _notificationManagerImportanceLevel) {

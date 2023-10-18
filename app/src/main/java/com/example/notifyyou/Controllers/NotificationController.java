@@ -18,4 +18,8 @@ public class NotificationController {
         manager.notify(_notificationId, _n);
 
     }
+
+    public void Cancel (Integer _notificationId) {
+        manager.cancel(_notificationId);
+    }
 }
