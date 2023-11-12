@@ -1,31 +1,26 @@
 package com.example.notifyyou.Utils.Permissions;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationManagerCompat;
-
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.notifyyou.Utils.CONFIG;
 
 public class NotificationHelper {
 
     private NotificationManager m;
-    private Activity a;
+    private AppCompatActivity a;
 
-    public NotificationHelper (NotificationManager _m, Activity _a) {
+    public NotificationHelper (NotificationManager _m, AppCompatActivity _a) {
         this.m = _m;
         this.a = _a;
 
@@ -62,11 +57,29 @@ public class NotificationHelper {
     }
 
     public void InitializeDefaultNotificationChannel () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
-            m.createNotificationChannel(channel);
 
-        }
+        permissionLauncherSingle.launch("android.permission.POST_NOTIFICATIONS");
     }
+
+    private ActivityResultLauncher<String> permissionLauncherSingle = a.registerForActivityResult(
+        new ActivityResultContracts.RequestPermission(),
+        new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult (Boolean granted) {
+
+                if (granted) {
+                    NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
+                    m.createNotificationChannel(channel);
+
+                    Toast.makeText(a, "Notification is permitted", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(a, "Notification is blocked! You won't recieve any notifications from us!", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        }
+    );
 
 }

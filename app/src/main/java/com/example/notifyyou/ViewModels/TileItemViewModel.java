@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.Repositories.TileItemRepository;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -6,11 +6,12 @@ import androidx.room.TypeConverters;
 
 import com.example.notifyyou.Utils.Converters.TimestampConverter;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity(tableName = "tile_items")
 @TypeConverters({TimestampConverter.class})
-public class TileItem {
+public class TileItem implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Integer id;

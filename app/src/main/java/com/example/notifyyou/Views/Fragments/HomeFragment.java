@@ -89,6 +89,8 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -143,9 +145,9 @@ public class HomeFragment extends Fragment {
                         pinnedNotifications.remove(itemId);
                     }
                 }
-
-                // Update the adapter's data with the new data
-                ((settableTileItemList) _adapter).setTileItemList(newTileItems);
+//
+//                // Update the adapter's data with the new data
+//                ((settableTileItemList) _adapter).setTileItemList(newTileItems);
             }
         });
 

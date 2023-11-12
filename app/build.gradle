@@ -36,7 +36,12 @@ dependencies {
 
     def lifecycle_version = "2.6.2"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
-//    implementation "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    def activity_version = "1.8.0"
+    implementation "androidx.activity:activity:$activity_version"
+
+    def fragment_version = "1.6.2"
+    implementation "androidx.fragment:fragment:$fragment_version"
 
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.code.gson:gson:2.9.0'

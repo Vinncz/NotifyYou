@@ -25,4 +25,5 @@ public class CONFIG {
      *  OTHER CONSTANTS
      */
     public static final String applicationName = "NotifyYou";
+    public static final Integer activityFinishedSoRefreshViewModel = -698008;
 }

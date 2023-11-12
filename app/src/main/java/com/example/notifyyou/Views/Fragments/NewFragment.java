@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -91,17 +92,20 @@ public class NewFragment extends Fragment {
             String notificationTitle = title.getText().toString();
             String notificationBody = body.getText().toString();
 
-            TileItemController tic = new TileItemController(v.getContext());
-            Boolean isValid = tic.validate(notificationTitle, notificationBody);
+//            TileItemController tic = new TileItemController(v.getContext());
+//            Boolean isValid = tic.validate(notificationTitle, notificationBody);
 
-            if (isValid) {
+//            if (isValid) {
                 TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
                 vm.insert(ti);
+                title.setText("");
+                body.setText("");
 
-            } else {
-                Toast.makeText(getContext(), "Title and Body cannot be empty, and must have at least 3 characters!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(getContext(), "Title and Body cannot be empty, and must have at least 3 characters!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Successfully created TileItem!", Toast.LENGTH_SHORT).show();
 
-            }
+//            }
 
         });
 

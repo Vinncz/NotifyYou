@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationHelper nh = new NotificationHelper(
                                         (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE),
-                                        MainActivity.this
+                                        this
                                     );
 
         handleBottomNavInitialization(manager);

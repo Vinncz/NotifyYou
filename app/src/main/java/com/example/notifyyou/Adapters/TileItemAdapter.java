@@ -1,5 +1,6 @@
 package com.example.notifyyou.Adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
+import com.example.notifyyou.Views.Activities.EditTileItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileItemHolder> implements settableTileItemList {
 
     private List<TileItem> tileItemList = new ArrayList<TileItem>();
+    private View itemView;
     private TileItemViewModel vm;
 
     /* Constructor */
@@ -30,12 +33,18 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
     @NonNull
     @Override
     public TileItemHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_item, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_item, parent, false);
+
         return new TileItemHolder(itemView);
     }
     @Override
     public void onBindViewHolder (@NonNull TileItemHolder holder, int position) {
         TileItem ti = tileItemList.get(position);
+        itemView.setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), EditTileItem.class);
+            i.putExtra("tile_item", ti);
+            itemView.getContext().startActivity(i);
+        });
 
         holder.id.setText(ti.getId().toString());
         holder.isPinned.setText(ti.getIsPinned().toString());
@@ -110,7 +119,6 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
             deleteToggle.setOnClickListener(v -> {
                 Toast.makeText(v.getContext(), "delete was pressed!", Toast.LENGTH_SHORT).show();
             });
-
         }
     }
 }
