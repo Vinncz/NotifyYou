@@ -57,29 +57,31 @@ public class NotificationHelper {
     }
 
     public void InitializeDefaultNotificationChannel () {
+        if (a != null) {
+            ActivityResultLauncher<String> permissionLauncherSingle = a.registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    new ActivityResultCallback<Boolean>() {
+                        @Override
+                        public void onActivityResult (Boolean granted) {
 
-        permissionLauncherSingle.launch("android.permission.POST_NOTIFICATIONS");
-    }
+                            if (granted) {
+                                NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
+                                m.createNotificationChannel(channel);
 
-    private ActivityResultLauncher<String> permissionLauncherSingle = a.registerForActivityResult(
-        new ActivityResultContracts.RequestPermission(),
-        new ActivityResultCallback<Boolean>() {
-            @Override
-            public void onActivityResult (Boolean granted) {
+                                Toast.makeText(a, "Notification is permitted", Toast.LENGTH_SHORT).show();
 
-                if (granted) {
-                    NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
-                    m.createNotificationChannel(channel);
+                            } else {
+                                Toast.makeText(a, "Notification is blocked! You won't receive any notifications from us!", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(a, "Notification is permitted", Toast.LENGTH_SHORT).show();
+                            }
 
-                } else {
-                    Toast.makeText(a, "Notification is blocked! You won't recieve any notifications from us!", Toast.LENGTH_SHORT).show();
-
-                }
-
+                        }
+                    }
+            );
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && a != null) {
+                permissionLauncherSingle.launch("android.permission.POST_NOTIFICATIONS");
             }
         }
-    );
+    }
 
 }
