@@ -1,19 +1,12 @@
 package com.example.notifyyou.Adapters;
 
-import android.app.Notification;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notifyyou.Controllers.NotificationController;
-import com.example.notifyyou.Factories.NotificationFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
@@ -98,7 +91,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
                 notifyDataSetChanged();
             });
 
-            id.setVisibility(View.VISIBLE);;
+            id.setVisibility(View.VISIBLE);
             id.setText(_ti.getId().toString());
 
             isPinned.setVisibility(View.VISIBLE);

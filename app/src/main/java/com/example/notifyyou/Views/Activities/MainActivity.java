@@ -1,24 +1,22 @@
 package com.example.notifyyou.Views.Activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-
-import com.example.notifyyou.Models.TileItem;
+import com.example.notifyyou.R;
+import com.example.notifyyou.Utils.Permissions.NotificationHelper;
 import com.example.notifyyou.Utils.Permissions.PermissionManager;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
 import com.example.notifyyou.Views.Fragments.HomeFragment;
 import com.example.notifyyou.Views.Fragments.NewFragment;
-import com.example.notifyyou.R;
-import com.example.notifyyou.Utils.CONFIG;
-import com.example.notifyyou.Utils.Permissions.NotificationHelper;
+import com.example.notifyyou.Views.Fragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         displayInitialFragment(manager, new HomeFragment().withViewModel(vw));
 
-        NotificationHelper nh = new NotificationHelper(
-                                        (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE),
-                                        this
-                                    );
+        new NotificationHelper(
+            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE),
+            this
+        );
 
         handleBottomNavInitialization(manager);
 
@@ -63,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
                     } else if (itemId == R.id.newTileItem) {
                         selectedFragment = new NewFragment().withViewModel(vw);
+
+                    } else if (itemId == R.id.settings) {
+                        selectedFragment = new SettingsFragment();
 
                     }
 

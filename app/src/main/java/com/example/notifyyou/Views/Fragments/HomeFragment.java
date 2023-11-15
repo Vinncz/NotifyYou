@@ -2,29 +2,24 @@ package com.example.notifyyou.Views.Fragments;
 
 import android.app.Notification;
 import android.os.Bundle;
-
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.notifyyou.Adapters.PinnedTileItemsAdapter;
 import com.example.notifyyou.Adapters.TileItemAdapter;
-import com.example.notifyyou.Adapters.TileItemsAdapterOLD;
 import com.example.notifyyou.Adapters.settableTileItemList;
 import com.example.notifyyou.Controllers.NotificationController;
 import com.example.notifyyou.Factories.NotificationFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
-import com.example.notifyyou.Repositories.TileItemRepositoryOLD;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
 
 import java.util.ArrayList;
@@ -114,7 +109,7 @@ public class HomeFragment extends Fragment {
         Map<Integer, Notification> pinnedNotifications = new HashMap<>();
 
         LiveData<List<TileItem>> tileItemsLiveData = _pinned ? vm.getAllPinned() : vm.getAllUnpinned();
-        tileItemsLiveData.observe(this, new Observer<List<TileItem>>() {
+        tileItemsLiveData.observe(getViewLifecycleOwner(), new Observer<List<TileItem>>() {
             @Override
             public void onChanged(List<TileItem> newTileItems) {
                 Set<Integer> newPinnedItems = new HashSet<>();
@@ -153,7 +148,7 @@ public class HomeFragment extends Fragment {
 
 
         if (_pinned) {
-            vm.getAllPinned().observe(this, new Observer<List<TileItem>>() {
+            vm.getAllPinned().observe(getViewLifecycleOwner(), new Observer<List<TileItem>>() {
                 @Override
                 public void onChanged (List<TileItem> tileItems) {
                     ((settableTileItemList) _adapter).setTileItemList(tileItems);
@@ -161,7 +156,7 @@ public class HomeFragment extends Fragment {
             });
 
         } else {
-            vm.getAllUnpinned().observe(this, new Observer<List<TileItem>>() {
+            vm.getAllUnpinned().observe(getViewLifecycleOwner(), new Observer<List<TileItem>>() {
                 @Override
                 public void onChanged (List<TileItem> tileItems) {
                     ((settableTileItemList) _adapter).setTileItemList(tileItems);
