@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.notifyyou.Controllers.NotificationController;
@@ -87,6 +88,18 @@ public class NewFragment extends Fragment {
         Button b = v.findViewById(R.id.NotificationButton);
         EditText title = v.findViewById(R.id.CustomNotificationHead);
         EditText body = v.findViewById(R.id.CustomNotificationBody);
+        com.google.android.material.materialswitch.MaterialSwitch useAlarm = v.findViewById(R.id.useAlarm);
+        TimePicker timePicker = v.findViewById(R.id.alarmValue);
+
+        timePicker.setVisibility(View.GONE);
+        useAlarm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (timePicker.getVisibility() != View.VISIBLE) {
+                timePicker.setVisibility(View.VISIBLE);
+
+            } else if (timePicker.getVisibility() != View.GONE) {
+                timePicker.setVisibility(View.GONE);
+            }
+        });
 
         b.setOnClickListener(view -> {
             String notificationTitle = title.getText().toString();

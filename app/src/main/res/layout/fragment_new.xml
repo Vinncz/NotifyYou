@@ -42,6 +42,17 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Attach Alarm"
+            android:id="@+id/useAlarm"/>
+
+        <TimePicker
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/alarmValue"/>
+
         <Button
             android:id="@+id/NotificationButton"
             android:layout_width="match_parent"

@@ -16,8 +16,8 @@ import java.util.List;
 
 public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItemsAdapter.TileItemHolder> implements settableTileItemList {
 
-    private List<TileItem> tileItemList = new ArrayList<TileItem>();
-    private TileItemViewModel vm;
+    private List<TileItem> tileItemList = new ArrayList<>();
+    private final TileItemViewModel vm;
 
     /* Constructor */
     public PinnedTileItemsAdapter (TileItemViewModel _vm) {
@@ -57,6 +57,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
     class TileItemHolder extends RecyclerView.ViewHolder {
         private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned;
         private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle;
+        private final com.google.android.material.materialswitch.MaterialSwitch useAlarm;
 
         public TileItemHolder bindData (TileItem _ti) {
             title.setMaxLines(2);
@@ -120,6 +121,8 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
             deleteToggle = itemView.findViewById(R.id.deleteTileItem);
 
+            useAlarm = itemView.findViewById(R.id.alarm);
+
         }
 
         public TileItemHolder bindEmptyState () {
@@ -129,6 +132,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
             unpinToggle.setVisibility(View.GONE);
             deleteToggle.setVisibility(View.GONE);
             isPinned.setVisibility(View.GONE);
+            useAlarm.setVisibility(View.GONE);
             return this;
         }
     }
