@@ -28,8 +28,8 @@ public class NotificationHelper {
     }
 
     public static void requestNotificationPolicyAccess (Context context, OnPermissionResultListener listener) {
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             if (!notificationManager.isNotificationPolicyAccessGranted()) {
                 Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
                 if (context instanceof Activity) {
@@ -80,6 +80,9 @@ public class NotificationHelper {
             );
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && a != null) {
                 permissionLauncherSingle.launch("android.permission.POST_NOTIFICATIONS");
+            } else {
+                NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
+                m.createNotificationChannel(channel);
             }
         }
     }
