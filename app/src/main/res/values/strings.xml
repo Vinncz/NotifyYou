@@ -20,4 +20,15 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
+
+
+
+
+
+    <!-- Preference Titles -->
+    <string name="alarm_header">Alarm</string>
+
+    <!-- Messages Preferences -->
+    <string name="alarm_tunes_picker">Alarm Tunes</string>
+
 </resources>

@@ -15,4 +15,22 @@
         <item>90</item>
         <item>120</item>
     </string-array>
+
+    <string-array name="alarm_tunes_picker_entries">
+        <item>Never Gonna Give You Up</item>
+        <item>Never Gonna Let You Down</item>
+        <item>Never Gonna Run Around and Desert You</item>
+        <item>Never Gonna Make You Cry</item>
+        <item>Never Gonna Say Goodbye</item>
+        <item>Never Gonna Tell a Lie and Hurt You</item>
+    </string-array>
+
+    <string-array name="alarm_tunes_picker_values">
+        <item>Never Gonna Give You Up</item>
+        <item>Never Gonna Let You Down</item>
+        <item>Never Gonna Run Around and Desert You</item>
+        <item>Never Gonna Make You Cry</item>
+        <item>Never Gonna Say Goodbye</item>
+        <item>Never Gonna Tell a Lie and Hurt You</item>
+    </string-array>
 </resources>
