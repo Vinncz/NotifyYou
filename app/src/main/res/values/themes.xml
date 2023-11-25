@@ -1,8 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.NotifyYou" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.NotifyYou" parent="Theme.Material3.DayNight.NoActionBar" tools:ignore="DuplicateDefinition">
+        <item name="colorPrimary">#4351D0</item>
+        <item name="colorOnPrimary">#FBFBFE</item>
+        <item name="colorOnPrimaryContainer">#FBFCFE</item>
+        <item name="colorOnPrimaryContainer">#4351D0</item>
+        <item name="colorOutline">#677183</item>
+        <item name="colorSurfaceContainerHighest">#F1F3FF</item>
+        <item name="colorSurface">#F5F6FF</item>
+        <item name="colorSurfaceContainerHigh">#F1F3FF</item>
+        <item name="colorSurfaceContainer">#F1F3FF</item>
+        <item name="colorSecondaryContainer">#C3C8F3</item>
+        <item name="colorSurfaceVariant">#F1F3FF</item>
+        <item name="colorOnSecondaryContainer">#4B465B</item>
+        <item name="colorOnSurface">#1D1B20</item>
     </style>
 
     <style name="Theme.NotifyYou" parent="Base.Theme.NotifyYou" />
