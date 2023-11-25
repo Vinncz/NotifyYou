@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="346dp"
+    android:height="212dp"
+    android:viewportWidth="346"
+    android:viewportHeight="212"
+    >
+    <group>
+        <clip-path
+            android:pathData="M12 0H334C340.627 0 346 5.37258 346 12V200C346 206.627 340.627 212 334 212H12C5.37258 212 0 206.627 0 200V12C0 5.37258 5.37258 0 12 0Z"
+            />
+        <group
+            android:translateX="0.277"
+            android:translateY="-8.534"
+            android:pivotX="173"
+            android:pivotY="106"
+            android:scaleX="7.31"
+            android:scaleY="28.624"
+            android:rotation="51.352"
+            >
+            <path
+                android:pathData="M0 0V212H346V0"
+                >
+                <aapt:attr name="android:fillColor">
+                    <gradient
+                        android:type="radial"
+                        android:centerX="173"
+                        android:centerY="106"
+                        android:gradientRadius="86.5"
+                        >
+                        <item
+                            android:color="#FFFFFF"
+                            android:offset="0"
+                            />
+                        <item
+                            android:color="#FFFFFF"
+                            android:offset="0"
+                            />
+                        <item
+                            android:color="#F1F2FB"
+                            android:offset="1"
+                            />
+                    </gradient>
+                </aapt:attr>
+            </path>
+        </group>
+        <path
+            android:pathData="M12 0H334C340.627 0 346 5.37258 346 12V200C346 206.627 340.627 212 334 212H12C5.37258 212 0 206.627 0 200V12C0 5.37258 5.37258 0 12 0Z"
+            android:strokeWidth="2"
+            android:strokeColor="#C8CBE3"
+            />
+    </group>
+</vector>

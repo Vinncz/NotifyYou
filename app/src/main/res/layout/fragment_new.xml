@@ -38,7 +38,10 @@
                 android:id="@+id/CustomNotificationBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:minHeight="200dp"
+                android:gravity="top
+"
+            />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,15 +52,18 @@
             android:id="@+id/useAlarm"/>
 
         <TimePicker
+            android:id="@+id/alarmValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/alarmValue"/>
+            android:headerBackground="#4351D0"
+            android:numbersBackgroundColor="#F0F2FE"
+            android:numbersSelectorColor="#4351CF" />
 
         <Button
             android:id="@+id/NotificationButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
+            android:text="Insert"
             android:height="56dp"
             style="@style/Widget.Material3.Button.Icon"
         />
