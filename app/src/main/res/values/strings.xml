@@ -2,6 +2,11 @@
     <string name="app_name">NotifyYou</string>
     <string name="pinned_tiles">Pinned Tiles</string>
 
+
+    <string name="notification_permission_granted">Notification Permission was Granted!</string>
+    <string name="notification_permission_dismissed">You restricted NotifyYou from sending notifications!</string>
+    <string name="persuade_for_notification_permission">Did you know that NotifyYou are more helpful when you grant the permission?</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_testing_room_db">TestingRoomDB</string>

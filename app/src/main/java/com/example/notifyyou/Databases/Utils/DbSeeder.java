@@ -10,7 +10,6 @@ import java.util.concurrent.Executors;
 
 public abstract class DbSeeder <T extends RoomDatabase> {
     public ExecutorService es = Executors.newSingleThreadExecutor();
-    public Handler h = new Handler(Looper.getMainLooper());
     protected T db;
 
     public DbSeeder (T _databaseInstance) {

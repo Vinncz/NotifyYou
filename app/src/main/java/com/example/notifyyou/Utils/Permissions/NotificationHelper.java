@@ -9,26 +9,29 @@ import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.notifyyou.R;
 import com.example.notifyyou.Utils.CONFIG;
 
 public class NotificationHelper {
 
-    private NotificationManager m;
-    private AppCompatActivity a;
+    private NotificationManager notificationManager;
+    private AppCompatActivity activityInstance;
 
     public NotificationHelper (NotificationManager _m, AppCompatActivity _a) {
-        this.m = _m;
-        this.a = _a;
+        this.notificationManager = _m;
+        this.activityInstance = _a;
 
         InitializeDefaultNotificationChannel();
     }
 
+    @Deprecated
     public static void requestNotificationPolicyAccess (Context context, OnPermissionResultListener listener) {
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!notificationManager.isNotificationPolicyAccessGranted()) {
                 Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
@@ -48,42 +51,35 @@ public class NotificationHelper {
 
     }
 
-    public void CreateNotificationChannel (String _channelId, String _channelName, int _notificationManagerImportanceLevel) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            NotificationChannel channel = new NotificationChannel(_channelId, _channelName, _notificationManagerImportanceLevel);
-            m.createNotificationChannel(channel);
-
-        }
-    }
-
     public void InitializeDefaultNotificationChannel () {
-        if (a != null) {
-            ActivityResultLauncher<String> permissionLauncherSingle = a.registerForActivityResult(
+        if ( activityInstance != null ) {
+            ActivityResultLauncher<String> permissionLauncherSingle = activityInstance.registerForActivityResult(
                     new ActivityResultContracts.RequestPermission(),
-                    new ActivityResultCallback<Boolean>() {
-                        @Override
-                        public void onActivityResult (Boolean granted) {
 
-                            if (granted) {
-                                NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
-                                m.createNotificationChannel(channel);
+                    userGrantsNotificationPermission -> {
+                        if ( userGrantsNotificationPermission ) {
+                            Toast.makeText(activityInstance, R.string.notification_permission_granted, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activityInstance, R.string.persuade_for_notification_permission, Toast.LENGTH_LONG).show();
 
-                                Toast.makeText(a, "Notification is permitted", Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                Toast.makeText(a, "Notification is blocked! You won't receive any notifications from us!", Toast.LENGTH_SHORT).show();
-
-                            }
+                        } else {
+                            Toast.makeText(activityInstance, R.string.notification_permission_dismissed, Toast.LENGTH_SHORT).show();
 
                         }
                     }
             );
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && a != null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                /* ask the user for permission */
                 permissionLauncherSingle.launch("android.permission.POST_NOTIFICATIONS");
+                NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
+                notificationManager.createNotificationChannel(channel);
+
             } else {
                 NotificationChannel channel = new NotificationChannel(CONFIG.channelId, CONFIG.channelName, NotificationManager.IMPORTANCE_HIGH);
-                m.createNotificationChannel(channel);
+                notificationManager.createNotificationChannel(channel);
+
             }
+
         }
     }
 

@@ -108,7 +108,15 @@ public class HomeFragment extends Fragment {
 
         Map<Integer, Notification> pinnedNotifications = new HashMap<>();
 
+
+
+
+        /* Fetch all TileItems from database */
         LiveData<List<TileItem>> tileItemsLiveData = _pinned ? vm.getAllPinned() : vm.getAllUnpinned();
+
+
+
+
         tileItemsLiveData.observe(getViewLifecycleOwner(), new Observer<List<TileItem>>() {
             @Override
             public void onChanged(List<TileItem> newTileItems) {

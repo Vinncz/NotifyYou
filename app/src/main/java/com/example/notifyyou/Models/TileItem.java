@@ -32,6 +32,13 @@ public class TileItem implements Serializable {
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.modifiedAt = this.createdAt;
     }
+    public TileItem (String _title, String _body, Boolean _isPinned) {
+        this.title = _title;
+        this.body  = _body;
+        this.isPinned = _isPinned;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.modifiedAt = this.createdAt;
+    }
     public TileItem () {}
 
 

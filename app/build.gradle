@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -26,7 +27,9 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.6.0')
     implementation 'androidx.preference:preference:1.2.1'
+
     def room_version = "2.5.2"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

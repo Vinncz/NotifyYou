@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notifyyou.R;
 import com.example.notifyyou.Utils.Permissions.NotificationHelper;
-import com.example.notifyyou.Utils.Permissions.PermissionManager;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
 import com.example.notifyyou.Views.Fragments.HomeFragment;
 import com.example.notifyyou.Views.Fragments.NewFragment;
@@ -21,7 +20,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PermissionManager permissionManager;
     private TileItemViewModel vw;
 
     @Override
