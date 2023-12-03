@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "573253457538",
+    "project_id": "notifyyou-vinapp",
+    "storage_bucket": "notifyyou-vinapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573253457538:android:f4b7d6c21bd0e16265069b",
+        "android_client_info": {
+          "package_name": "com.example.notifyyou"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2cJTU6Lpl64CTTiuf3lqMI5Geg-8h3ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

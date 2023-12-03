@@ -6,7 +6,7 @@ public class CONFIG {
      *  (!)
      *  NOTIFICATION-RELATED CONSTANTS
      */
-,    public static final String databaseName = "tile_item_database";
+    public static final String databaseName = "tile_item_database";
     public static final String channelId = "NotifyYouNotificationChannelId";
     public static final String channelName = "Pinned TileItems";
     public static final String sharedPreferencePinnedTileItemsChannel = "NotifyYouPinnedTileItemsChannel";

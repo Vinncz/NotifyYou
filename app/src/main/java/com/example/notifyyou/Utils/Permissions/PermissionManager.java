@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+@Deprecated
 public class PermissionManager {
     public final static int PERMISSION_REQUEST_CODE = 1;
 
