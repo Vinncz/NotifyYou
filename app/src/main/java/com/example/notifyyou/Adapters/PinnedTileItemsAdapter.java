@@ -1,8 +1,12 @@
 package com.example.notifyyou.Adapters;
 
+import android.os.Handler;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +32,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
     @NonNull
     @Override
     public TileItemHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tile_itemsec, parent, false);
 
         return new TileItemHolder(itemView);
     }
@@ -56,7 +61,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
     class TileItemHolder extends RecyclerView.ViewHolder {
         private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned;
-        private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle;
+        private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle , dropDownToggle;
         private final com.google.android.material.materialswitch.MaterialSwitch useAlarm;
 
         public TileItemHolder bindData (TileItem _ti) {
@@ -92,6 +97,53 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
                 notifyDataSetChanged();
             });
 
+            dropDownToggle.setOnClickListener(view -> {
+                MaterialTextView bodyView = itemView.findViewById(R.id.body);
+
+                // Check if the body is currently invisible (gone)
+                boolean isBodyVisible = bodyView.getVisibility() == View.VISIBLE;
+
+                // Set visibility and animate bodyView
+                if (isBodyVisible) {
+                    // Body is visible, hide it
+                    bodyView.animate()
+                            .alpha(0f)
+                            .setDuration(500)
+                            .withEndAction(() -> {
+                                bodyView.setVisibility(View.GONE);
+
+                                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
+                                layoutParams.height = 0;
+                                bodyView.setLayoutParams(layoutParams);
+
+                                TransitionManager.beginDelayedTransition((ViewGroup) itemView, new AutoTransition());
+                            })
+                            .start();
+                } else {
+
+                    bodyView.setVisibility(View.VISIBLE);
+                    bodyView.setAlpha(0f);
+                    bodyView.animate()
+                            .alpha(1f)
+                            .setDuration(1000)
+                            .start();
+
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) bodyView.getLayoutParams();
+                    layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    bodyView.setLayoutParams(layoutParams);
+
+                    TransitionManager.beginDelayedTransition((ViewGroup) itemView, new AutoTransition());
+                }
+
+                // Animate rotation of dropDownToggle
+                float rotationDegree = isBodyVisible ? 0f : -180f;
+                dropDownToggle.animate()
+                        .rotation(rotationDegree)
+                        .setDuration(500)
+                        .start();
+            });
+
+
             id.setVisibility(View.VISIBLE);
             id.setText(_ti.getId().toString());
 
@@ -120,6 +172,8 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
             unpinToggle = itemView.findViewById(R.id.unpinTileItem);
 
             deleteToggle = itemView.findViewById(R.id.deleteTileItem);
+
+            dropDownToggle = itemView.findViewById(R.id.viewBody);
 
             useAlarm = itemView.findViewById(R.id.alarm);
 
