@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.AndroidViewModel;
-
+import java.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import com.example.notifyyou.Factories.TileItemFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
@@ -60,11 +61,22 @@ public class NewFragment extends Fragment {
             String notificationTitle = title.getText().toString();
             String notificationBody = body.getText().toString();
 
+            int hour = timePicker.getHour();
+            int minute = timePicker.getMinute();
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String currentDate = dateFormat.format(calendar.getTime());
+
+            String completeDateTime = currentDate + " " + String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+
+            String alarmTime = completeDateTime.substring(11);
+
 //            TileItemController tic = new TileItemController(v.getContext());
 //            Boolean isValid = tic.validate(notificationTitle, notificationBody);
 
 //            if (isValid) {
-                TileItem ti = TileItemFactory.MakeOne(notificationTitle, notificationBody);
+                TileItem ti = TileItemFactory.MakeOneWithAlarm(notificationTitle, notificationBody, alarmTime);
                 vm.insert(ti);
                 title.setText("");
                 body.setText("");

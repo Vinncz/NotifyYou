@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            >
+        >
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pinTileItem"
                 android:visibility="gone"
@@ -134,12 +134,26 @@
                 app:icon="@drawable/delete_tile_item_button"
                 />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/alarm"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alarm"
-                android:layout_weight="1"/>
+                android:orientation="horizontal"
+            >
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/alarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏰ 10:00"
+                />
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/alarmSwitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                />
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

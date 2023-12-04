@@ -55,6 +55,8 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
         holder.title.setText(ti.getTitle());
         holder.body.setText(ti.getBody());
 
+        holder.alarm.setText(ti.getSelectedTimeForAlarm());
+
         if (ti.getIsPinned()) {
             holder.unpinToggle.setVisibility(View.VISIBLE);
             holder.pinToggle.setVisibility(View.GONE);
@@ -94,7 +96,7 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
     }
 
     class TileItemHolder extends RecyclerView.ViewHolder {
-        private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned;
+        private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned, alarm;
         private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle , dropDownToggle;
 
         public TileItemHolder (@NonNull View itemView) {
@@ -108,6 +110,7 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
             id = itemView.findViewById(R.id.id);
 
             isPinned = itemView.findViewById(R.id.isPinned);
+            alarm = itemView.findViewById(R.id.alarm);
 
             pinToggle = itemView.findViewById(R.id.pinTileItem);
             pinToggle.setOnClickListener(v -> {

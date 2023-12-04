@@ -175,7 +175,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
             dropDownToggle = itemView.findViewById(R.id.viewBody);
 
-            useAlarm = itemView.findViewById(R.id.alarm);
+            useAlarm = itemView.findViewById(R.id.alarmSwitch);
 
         }
 
