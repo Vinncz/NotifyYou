@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notifyyou.Controllers.TileItemController;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
@@ -23,6 +25,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
     private List<TileItem> tileItemList = new ArrayList<>();
     private final TileItemViewModel vm;
+    private TileItemController tic = new TileItemController();
 
     /* Constructor */
     public PinnedTileItemsAdapter (TileItemViewModel _vm) {
@@ -60,7 +63,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
     }
 
     class TileItemHolder extends RecyclerView.ViewHolder {
-        private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned;
+        private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned, alarm;
         private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle , dropDownToggle;
         private final com.google.android.material.materialswitch.MaterialSwitch useAlarm;
 
@@ -79,6 +82,32 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
             }
 
+            alarm.setVisibility(View.VISIBLE);
+            alarm.setText("⏰ " + _ti.getSelectedTimeForAlarm());
+
+            useAlarm.setVisibility(View.VISIBLE);
+
+            if (_ti.getAlarmIsActive()){
+                if(!useAlarm.isChecked()){
+                    useAlarm.toggle();
+                }
+            }else {
+                if(useAlarm.isChecked()){
+                    useAlarm.toggle();
+                }
+            }
+
+            useAlarm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(useAlarm.isChecked()){
+                    _ti.setAlarmIsActive(true);
+                    tic.checkAlarm(_ti, itemView.getContext());
+                }else{
+                    _ti.setAlarmIsActive(false);
+                    tic.checkAlarm(_ti, itemView.getContext());
+                }
+            });
+
+
             pinToggle.setOnClickListener(v -> {
                 _ti.setIsPinned(true);
                 vm.update(_ti);
@@ -93,6 +122,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
             deleteToggle.setVisibility(View.VISIBLE);
             deleteToggle.setOnClickListener(v -> {
+                tic.cancelAlarm(_ti, itemView.getContext());
                 vm.delete(_ti);
                 notifyDataSetChanged();
             });
@@ -175,6 +205,8 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
 
             dropDownToggle = itemView.findViewById(R.id.viewBody);
 
+            alarm = itemView.findViewById(R.id.alarm);
+
             useAlarm = itemView.findViewById(R.id.alarmSwitch);
 
         }
@@ -186,6 +218,7 @@ public class PinnedTileItemsAdapter extends RecyclerView.Adapter<PinnedTileItems
             unpinToggle.setVisibility(View.GONE);
             deleteToggle.setVisibility(View.GONE);
             isPinned.setVisibility(View.GONE);
+            alarm.setVisibility(View.GONE);
             useAlarm.setVisibility(View.GONE);
             return this;
         }

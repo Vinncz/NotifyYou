@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notifyyou.Controllers.TileItemController;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
@@ -28,6 +29,8 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
     private List<TileItem> tileItemList = new ArrayList<TileItem>();
     private View itemView;
     private TileItemViewModel vm;
+
+    private TileItemController tic = new TileItemController();
 
     /* Constructor */
     public TileItemAdapter (TileItemViewModel _vm) {
@@ -55,7 +58,7 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
         holder.title.setText(ti.getTitle());
         holder.body.setText(ti.getBody());
 
-        holder.alarm.setText(ti.getSelectedTimeForAlarm());
+        holder.alarm.setText("⏰" + ti.getSelectedTimeForAlarm());
 
         if (ti.getIsPinned()) {
             holder.unpinToggle.setVisibility(View.VISIBLE);
@@ -66,6 +69,26 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
             holder.unpinToggle.setVisibility(View.GONE);
 
         }
+
+        if (ti.getAlarmIsActive()){
+            if(!holder.alarmSwitch.isChecked()){
+                holder.alarmSwitch.toggle();
+            }
+        }else {
+            if(holder.alarmSwitch.isChecked()){
+                holder.alarmSwitch.toggle();
+            }
+        }
+
+        holder.alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(holder.alarmSwitch.isChecked()){
+                ti.setAlarmIsActive(true);
+                tic.checkAlarm(ti, itemView.getContext());
+            }else{
+                ti.setAlarmIsActive(false);
+                tic.checkAlarm(ti, itemView.getContext());
+            }
+        });
 
         holder.pinToggle.setOnClickListener(v -> {
             ti.setIsPinned(true);
@@ -80,6 +103,7 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
         });
 
         holder.deleteToggle.setOnClickListener(v -> {
+            tic.cancelAlarm(ti, itemView.getContext());
             vm.delete(ti);
             notifyDataSetChanged();
         });
@@ -97,6 +121,7 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
 
     class TileItemHolder extends RecyclerView.ViewHolder {
         private final com.google.android.material.textview.MaterialTextView title, body, id, isPinned, alarm;
+        private final com.google.android.material.materialswitch.MaterialSwitch alarmSwitch;
         private final com.google.android.material.button.MaterialButton pinToggle, unpinToggle, deleteToggle , dropDownToggle;
 
         public TileItemHolder (@NonNull View itemView) {
@@ -111,6 +136,8 @@ public class TileItemAdapter extends RecyclerView.Adapter<TileItemAdapter.TileIt
 
             isPinned = itemView.findViewById(R.id.isPinned);
             alarm = itemView.findViewById(R.id.alarm);
+
+            alarmSwitch = itemView.findViewById((R.id.alarmSwitch));
 
             pinToggle = itemView.findViewById(R.id.pinTileItem);
             pinToggle.setOnClickListener(v -> {

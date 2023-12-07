@@ -1,10 +1,16 @@
 package com.example.notifyyou.Views.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -20,9 +26,11 @@ import com.example.notifyyou.Controllers.NotificationController;
 import com.example.notifyyou.Factories.NotificationFactory;
 import com.example.notifyyou.Models.TileItem;
 import com.example.notifyyou.R;
+import com.example.notifyyou.Receiver.AlarmReceiver;
 import com.example.notifyyou.ViewModels.TileItemViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +84,7 @@ public class HomeFragment extends Fragment {
 
 
         tileItemsLiveData.observe(getViewLifecycleOwner(), new Observer<List<TileItem>>() {
+            @SuppressLint("ScheduleExactAlarm")
             @Override
             public void onChanged(List<TileItem> newTileItems) {
                 Set<Integer> newPinnedItems = new HashSet<>();
@@ -134,4 +143,35 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
+//    private void checkAlarm(TileItem ti){
+//        // Set the alarm when the alarm is active.
+//        if(ti.getAlarmIsActive()){
+//            int hour = Integer.parseInt(ti.getSelectedTimeForAlarm().substring(0,2));
+//            int minute = Integer.parseInt(ti.getSelectedTimeForAlarm().substring(3,5));
+//            Calendar alarmTime = Calendar.getInstance();
+//            alarmTime.set(Calendar.HOUR_OF_DAY, hour);
+//            alarmTime.set(Calendar.MINUTE, minute);
+//            alarmTime.set(Calendar.SECOND, 0);
+//
+//            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(getContext(), AlarmReceiver.class);
+//            intent.putExtra("id", ti.getId());
+//            intent.putExtra("title", ti.getTitle());
+//            intent.putExtra("body", ti.getBody());
+//
+//            if (alarmTime.before(Calendar.getInstance())){
+//                alarmTime.add(Calendar.DATE, 1);
+//            }
+//
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), ti.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pendingIntent);
+//        }else {
+//            // Cancel the alarm when the alarm is off.
+//            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(getContext(), AlarmReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), ti.getId(), intent, PendingIntent.FLAG_IMMUTABLE);
+//            alarmManager.cancel(pendingIntent);
+//        }
+//    }
 }

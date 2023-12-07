@@ -15,7 +15,7 @@ public class TileItemFactory {
 
     public static TileItem MakeOneWithAlarm (String _title, String _body, String _selectedTimeForAlarm) {
         TileItem ti = new TileItem(_title, _body);
-        ti.setAlarmIsActive(true);
+        ti.setAlarmIsActive(false);
         ti.setSelectedTimeForAlarm(_selectedTimeForAlarm);
 
         return ti;
